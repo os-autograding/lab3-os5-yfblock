@@ -8,26 +8,6 @@ permissions:
   contents: read
 
 jobs:
-  setup:
-    name: CacheQemu
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache QEMU
-        id: qemu
-        uses: actions/cache@v3
-        with:
-          path: qemu-7.0.0
-          key: qemu-7.0.0-x86_64-riscv64
-      - name: Compile QEMU
-        if: steps.qemu.outputs.cache-hit != 'true'
-        run: |
-          sudo apt-get update
-          sudo apt-get install ninja-build -y
-          wget https://download.qemu.org/qemu-7.0.0.tar.xz
-          tar -xf qemu-7.0.0.tar.xz
-          cd qemu-7.0.0
-          ./configure --target-list=riscv64-softmmu
-          make -j
   build:
     name: Autograding
     runs-on: ubuntu-latest
@@ -45,11 +25,21 @@ jobs:
           version: latest
           use-tool-cache: true
       - name: Cache QEMU
-        id: qemu
+        # id: qemu
         uses: actions/cache@v3
         with:
           path: qemu-7.0.0
           key: qemu-7.0.0-x86_64-riscv64
+      - name: Compile QEMU
+        if: steps.qemu.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install ninja-build -y
+          wget https://download.qemu.org/qemu-7.0.0.tar.xz
+          tar -xf qemu-7.0.0.tar.xz
+          cd qemu-7.0.0
+          ./configure --target-list=riscv64-softmmu
+          make -j
       - name: Install QEMU
         run: |
           sudo apt-get update
@@ -59,5 +49,5 @@ jobs:
           qemu-system-riscv64 --version
       - name: Run
         run: |
-          make test5
-#      - uses: education/autograding@v1
+          make test3
+    #  - uses: education/autograding@v1
