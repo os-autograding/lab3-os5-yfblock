@@ -50,4 +50,4 @@ jobs:
       - name: Run
         run: |
           make test3
-    #  - uses: education/autograding@v1
+     - uses: yfblock/os-autograding
