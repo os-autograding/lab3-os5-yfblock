@@ -47,4 +47,4 @@ jobs:
           cd qemu-7.0.0
           sudo make install
           qemu-system-riscv64 --version
-     - uses: yfblock/os-autograding
+      - uses: yfblock/os-autograding
